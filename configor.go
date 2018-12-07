@@ -34,12 +34,6 @@ func New(config *Config) *Configor {
 	return &Configor{Config: config}
 }
 
-var (
-	// ErrNoConfigFiles is returned by Load when no files from the given list
-	// could be found.
-	ErrNoConfigFiles = errors.New("could not find any configuration files")
-)
-
 // Load will decode the given files into `config` using default settings.
 func Load(config interface{}, files ...string) (err error) {
 	return New(nil).Load(config, files...)
@@ -48,9 +42,6 @@ func Load(config interface{}, files ...string) (err error) {
 // Load will decode the given files into `config`
 func (configor *Configor) Load(config interface{}, files ...string) (err error) {
 	configFiles := configor.getConfigurationFiles(files...)
-	if len(configFiles) == 0 {
-		return ErrNoConfigFiles
-	}
 
 	for _, file := range configFiles {
 		if err := UnmarshalFile(config, file, configor.ErrorOnUnmatchedKeys); err != nil {
